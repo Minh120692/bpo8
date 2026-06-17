@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Call Center Voice Analytics | Mieruka Engine</title>
+  <meta name="description" content="Use call logs and customer voice data to improve contact center operations, discover product insights, and share analysis across your organization.">
+  <meta property="og:title" content="Call Center Voice Analytics | Mieruka Engine">
+  <meta property="og:description" content="Turn call center conversations into actionable customer insights with AI-powered analysis and reporting.">
+  <meta property="og:image" content="as/img/common/main.png">
+  <link rel="icon" type="image/png" href="as/img/common/favicon.png">
+  <style>
+    :root {
+      --blue: #1366a1;
+      --blue-dark: #0b4773;
+      --sky: #e9f6ff;
+      --orange: #ff8a24;
+      --orange-dark: #e96814;
+      --ink: #143247;
+      --muted: #5f7180;
+      --line: #d9e8f3;
+      --bg: #f6fbff;
+      --white: #fff;
+      --shadow: 0 18px 50px rgba(19, 102, 161, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Arial, "Helvetica Neue", sans-serif;
+      line-height: 1.65;
+      background: var(--white);
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid rgba(19, 102, 161, 0.1);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 220px;
+    }
+
+    .brand img { width: 180px; }
+
+    .brand-sub {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav a { white-space: nowrap; }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 6px;
+      font-weight: 800;
+      line-height: 1.2;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(19, 102, 161, 0.2);
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+    }
+
+    .btn-secondary {
+      color: var(--blue);
+      background: var(--white);
+      border: 2px solid var(--blue);
+    }
+
+    .btn-blue {
+      color: var(--white);
+      background: linear-gradient(135deg, #2183c3, var(--blue-dark));
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 78px 0 70px;
+      background:
+        linear-gradient(100deg, rgba(255,255,255,.95) 0%, rgba(255,255,255,.92) 48%, rgba(255,255,255,.42) 100%),
+        url("as/img/callcenter/bg/bg_fv@2x.png") center/cover no-repeat;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr minmax(360px, 48%);
+      align-items: center;
+      gap: 42px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 14px;
+      margin-bottom: 18px;
+      border-radius: 999px;
+      color: var(--blue);
+      background: #dff2ff;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 20px;
+      color: var(--blue-dark);
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 640px;
+      margin-bottom: 28px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-image {
+      filter: drop-shadow(0 24px 36px rgba(19, 102, 161, 0.18));
+    }
+
+    section {
+      padding: 76px 0;
+    }
+
+    .section-alt { background: var(--bg); }
+
+    .section-head {
+      max-width: 780px;
+      margin: 0 auto 38px;
+      text-align: center;
+    }
+
+    .section-head h2 {
+      margin-bottom: 14px;
+      color: var(--blue-dark);
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.2;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .logo-proof {
+      text-align: center;
+      padding: 54px 0;
+      background: var(--white);
+    }
+
+    .logo-proof h2 {
+      max-width: 840px;
+      margin: 0 auto 32px;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .logo-proof strong { color: var(--blue); }
+
+    .outcome-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .outcome-card,
+    .case-card,
+    .function-card,
+    .support-card,
+    .detail-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .outcome-card {
+      padding: 26px;
+      text-align: center;
+    }
+
+    .outcome-card img {
+      width: 170px;
+      margin: 0 auto 18px;
+    }
+
+    .outcome-card h3,
+    .support-card h3,
+    .function-card h3,
+    .case-card h3 {
+      margin-bottom: 10px;
+      color: var(--blue-dark);
+      font-size: 21px;
+      line-height: 1.3;
+    }
+
+    .proof-strip {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 22px;
+      max-width: 680px;
+      margin: 38px auto 0;
+      padding: 24px;
+      border-radius: 8px;
+      background: var(--sky);
+      text-align: left;
+    }
+
+    .proof-strip img { width: 110px; }
+
+    .proof-strip p {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--blue-dark);
+    }
+
+    .anchor-nav {
+      position: sticky;
+      top: 76px;
+      z-index: 10;
+      background: var(--blue);
+      box-shadow: 0 10px 24px rgba(19, 102, 161, 0.16);
+    }
+
+    .anchor-nav ul {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .anchor-nav a {
+      display: block;
+      padding: 15px 22px;
+      color: var(--white);
+      font-weight: 800;
+      font-size: 14px;
+      border-left: 1px solid rgba(255,255,255,.24);
+    }
+
+    .anchor-nav li:last-child a { border-right: 1px solid rgba(255,255,255,.24); }
+
+    .solution-list {
+      display: grid;
+      gap: 34px;
+    }
+
+    .solution-card {
+      display: grid;
+      grid-template-columns: 1fr 42%;
+      gap: 32px;
+      align-items: center;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .solution-card:nth-child(even) {
+      grid-template-columns: 42% 1fr;
+    }
+
+    .solution-card:nth-child(even) .solution-text { order: 2; }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tag {
+      padding: 4px 10px;
+      border-radius: 999px;
+      color: var(--blue);
+      background: #eaf6ff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .solution-card h3 {
+      margin-bottom: 18px;
+      color: var(--blue-dark);
+      font-size: 28px;
+      line-height: 1.25;
+    }
+
+    .solution-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    .cta-band {
+      padding: 56px 0;
+      color: var(--white);
+      background:
+        linear-gradient(135deg, rgba(19,102,161,.96), rgba(7,59,96,.94)),
+        url("as/img/generative-ai-consulting/pc/bg/bg_cta@2x.png") center/cover no-repeat;
+    }
+
+    .cta-box {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      align-items: center;
+      gap: 34px;
+    }
+
+    .cta-box h2 {
+      margin-bottom: 8px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.2;
+    }
+
+    .cta-box p {
+      color: rgba(255,255,255,.88);
+      font-size: 18px;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .case-card img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+    }
+
+    .case-card div { padding: 22px; }
+
+    .case-card p,
+    .function-card p,
+    .support-card li,
+    .detail-card p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .function-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .function-card { padding: 22px; }
+
+    .function-card img {
+      width: 100%;
+      margin-bottom: 18px;
+      border-radius: 6px;
+      background: var(--sky);
+    }
+
+    .picture-panel {
+      padding: 34px;
+      border-radius: 8px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .picture-logo {
+      width: 260px;
+      margin: 0 auto 28px;
+    }
+
+    .picture-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .picture-item {
+      padding: 18px;
+      border-radius: 8px;
+      background: #f7fbff;
+      text-align: center;
+      border: 1px solid var(--line);
+    }
+
+    .picture-item img {
+      height: 92px;
+      margin: 0 auto 14px;
+    }
+
+    .picture-item h3 {
+      margin-bottom: 8px;
+      color: var(--blue-dark);
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .picture-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .install-steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .install-steps li {
+      min-height: 142px;
+      padding: 20px 16px;
+      border-radius: 8px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .step {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--orange-dark);
+      font-weight: 900;
+    }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .support-card img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .support-card div { padding: 22px; }
+
+    .support-card ul {
+      margin: 0;
+      padding-left: 19px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+    }
+
+    .detail-card {
+      min-height: 150px;
+      padding: 22px 14px;
+      text-align: center;
+    }
+
+    .detail-card img {
+      height: 42px;
+      margin: 0 auto 14px;
+    }
+
+    .detail-card strong {
+      display: block;
+      color: var(--blue-dark);
+      font-size: 17px;
+    }
+
+    .site-footer {
+      padding: 44px 0;
+      color: rgba(255,255,255,.84);
+      background: #143247;
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .header-inner { flex-wrap: wrap; padding: 12px 0; }
+      .nav { order: 3; width: 100%; overflow-x: auto; padding-bottom: 4px; }
+      .hero-grid,
+      .solution-card,
+      .solution-card:nth-child(even),
+      .cta-box {
+        grid-template-columns: 1fr;
+      }
+      .solution-card:nth-child(even) .solution-text { order: initial; }
+      .case-grid,
+      .function-grid,
+      .support-grid,
+      .outcome-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .picture-grid,
+      .install-steps,
+      .detail-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .anchor-nav { position: static; }
+      .anchor-nav ul { overflow-x: auto; justify-content: flex-start; }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 28px, 1120px); }
+      .brand-sub { display: none; }
+      .brand img { width: 150px; }
+      .nav { gap: 16px; font-size: 13px; }
+      .hero { padding: 52px 0; }
+      section { padding: 56px 0; }
+      .btn-row { width: 100%; }
+      .btn { width: 100%; }
+      .case-grid,
+      .function-grid,
+      .support-grid,
+      .outcome-grid,
+      .picture-grid,
+      .install-steps,
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+      .solution-card,
+      .picture-panel {
+        padding: 24px;
+      }
+      .proof-strip {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .proof-strip img { margin: 0 auto; }
+      .footer-grid {
+        display: block;
+      }
+      .footer-links { margin-top: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Mieruka Engine home">
+        <img src="as/img/common/logo.svg" alt="Mieruka Engine">
+        <span class="brand-sub">AI-powered customer voice platform</span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#solution">Solutions</a>
+        <a href="#case">Use Cases</a>
+        <a href="#function">Features</a>
+        <a href="#picture">Platform</a>
+        <a href="#support">Support</a>
+      </nav>
+      <div class="btn-row">
+        <a class="btn btn-secondary" href="#detail">Download</a>
+        <a class="btn btn-primary" href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Call Center Voice Analytics</span>
+          <h1>Turn call logs into customer insight.</h1>
+          <p class="hero-copy">Mieruka Engine helps contact centers transform stored conversations into product ideas, operational improvements, risk alerts, and executive-ready reports.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#contact">Talk to us</a>
+            <a class="btn btn-secondary" href="#function">Explore features</a>
+          </div>
+        </div>
+        <img class="hero-image" src="as/img/callcenter/main/img_fv@2x.png" alt="Analytics dashboard for call center voice data">
+      </div>
+    </section>
+
+    <section class="logo-proof">
+      <div class="container">
+        <h2><strong>Mieruka Engine</strong> supports improvement programs across industries by putting customer voices at the center of decision-making.</h2>
+        <div class="outcome-grid">
+          <article class="outcome-card">
+            <img src="as/img/callcenter/newidea.png" alt="Product and service improvement">
+            <h3>Improve Products and Services</h3>
+            <p>Find recurring needs, complaints, and ideas hidden inside everyday calls.</p>
+          </article>
+          <article class="outcome-card">
+            <img src="as/img/callcenter/optimiz.png" alt="Reduce analysis workload">
+            <h3>Reduce Analysis Workload</h3>
+            <p>Use AI summaries, classification, and reports to shorten manual review time.</p>
+          </article>
+          <article class="outcome-card">
+            <img src="as/img/callcenter/share.png" alt="Share analysis results">
+            <h3>Share Insights Company-Wide</h3>
+            <p>Distribute trends and findings to teams that can act on them quickly.</p>
+          </article>
+        </div>
+        <div class="proof-strip">
+          <img src="as/img/brands/emblem.png" alt="Market share award emblem">
+          <p>Text mining SaaS market share leader for 12 consecutive years, with more than 1,600 total deployments.</p>
+        </div>
+      </div>
+    </section>
+
+    <nav class="anchor-nav" aria-label="Page sections">
+      <ul>
+        <li><a href="#solution">What It Solves</a></li>
+        <li><a href="#case">Use Cases</a></li>
+        <li><a href="#function">Main Features</a></li>
+        <li><a href="#picture">Platform View</a></li>
+        <li><a href="#support">Support</a></li>
+      </ul>
+    </nav>
+
+    <section id="solution" class="section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Solutions</p>
+          <h2>Resolve common contact center challenges.</h2>
+          <p>Bring call logs, transcripts, and related customer data together so teams can see trends, reduce after-call work, and respond to risks before they spread.</p>
+        </div>
+        <div class="solution-list">
+          <article class="solution-card">
+            <div class="solution-text">
+              <div class="tag-row">
+                <span class="tag">Data consolidation</span>
+                <span class="tag">Integration</span>
+                <span class="tag">Auto summaries</span>
+              </div>
+              <h3>Streamline contact center operations.</h3>
+              <ul>
+                <li>Centralize transcripts, CTI records, chat logs, and operator notes.</li>
+                <li>Automatically summarize conversations and reduce after-call work.</li>
+                <li>Use generative AI to classify topics and speed up daily analysis.</li>
+              </ul>
+            </div>
+            <img src="as/img/callcenter/main/img_solution_01@2x.png" alt="Operational efficiency dashboard">
+          </article>
+          <article class="solution-card">
+            <div class="solution-text">
+              <div class="tag-row">
+                <span class="tag">Language analysis</span>
+                <span class="tag">Needs discovery</span>
+              </div>
+              <h3>Accelerate product and service improvements.</h3>
+              <ul>
+                <li>Identify causes and background factors that numbers alone cannot show.</li>
+                <li>Visualize customer needs and generate improvement ideas with AI.</li>
+                <li>Share analysis with executives, marketing, product, and frontline teams.</li>
+              </ul>
+            </div>
+            <img src="as/img/callcenter/main/img_solution_02@2x.png" alt="Product improvement analytics">
+          </article>
+          <article class="solution-card">
+            <div class="solution-text">
+              <div class="tag-row">
+                <span class="tag">Surging words</span>
+                <span class="tag">Risk detection</span>
+              </div>
+              <h3>Monitor risks in real time.</h3>
+              <ul>
+                <li>Detect sudden increases in specific topics, words, or inquiry patterns.</li>
+                <li>Automatically alert the right departments and stakeholders.</li>
+                <li>Build an objective monitoring process that helps prevent issue escalation.</li>
+              </ul>
+            </div>
+            <img src="as/img/callcenter/main/img_solution_03@2x.png" alt="Real-time risk monitoring">
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="cta-band">
+      <div class="container cta-box">
+        <img src="as/img/generative-ai-consulting/pc/main/img_cta_pc@2x.png" alt="Mieruka Engine consultation">
+        <div>
+          <h2>Customer voices become strategy.</h2>
+          <p>Consultants with experience across industries help you design the right analysis flow and turn insights into action.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="mailto:contact@example.com">Contact us</a>
+            <a class="btn btn-secondary" href="#function">See the platform</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="case">
+      <div class="container">
+        <div class="section-head">
+          <h2>Call center use cases</h2>
+          <p>Examples of how organizations use customer voice analysis to improve service quality and business decisions.</p>
+        </div>
+        <div class="case-grid">
+          <article class="case-card">
+            <img src="as/img/callcenter/main/img_case_01@2x.png" alt="Mizuho Bank case study">
+            <div>
+              <h3>Mizuho Bank</h3>
+              <p>Used AI-assisted voice-of-customer analysis to support customer satisfaction improvements.</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <img src="as/img/callcenter/main/img_case_02@2x.png" alt="Bandai case study">
+            <div>
+              <h3>Bandai</h3>
+              <p>Built an internal portal to monitor inquiry changes and improve Q&amp;A content.</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <img src="as/img/callcenter/main/img_case_03@2x.png" alt="Skymark Airlines case study">
+            <div>
+              <h3>Skymark Airlines</h3>
+              <p>Used customer service insights to strengthen CS activities and frontline action.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="function" class="section-alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Features for using customer voices</h2>
+          <p>From ingestion and classification to AI reporting and alerts, the platform covers the full analysis workflow.</p>
+        </div>
+        <div class="function-grid">
+          <article class="function-card">
+            <img src="as/img/callcenter/main/img_function_01@2x.png" alt="AI automatic reports">
+            <h3>AI Auto Reports</h3>
+            <p>Generate concise reports from imported customer voice data.</p>
+          </article>
+          <article class="function-card">
+            <img src="as/img/callcenter/main/img_function_02@2x.png" alt="Inquiry classification">
+            <h3>Inquiry Aggregation and Classification</h3>
+            <p>Create categories automatically and understand overall trends faster.</p>
+          </article>
+          <article class="function-card">
+            <img src="as/img/callcenter/main/img_function_03@2x.png" alt="Weekly and monthly reports">
+            <h3>Weekly and Monthly Automation</h3>
+            <p>Automate recurring reports tailored to your internal indicators.</p>
+          </article>
+          <article class="function-card">
+            <img src="as/img/callcenter/main/img_function_04@2x.png" alt="Conversation map">
+            <h3>Overall Inquiry View</h3>
+            <p>Map and rank conversation topics to see the full landscape.</p>
+          </article>
+          <article class="function-card">
+            <img src="as/img/callcenter/main/img_function_05@2x.png" alt="Needs and complaint discovery">
+            <h3>Needs and Complaint Discovery</h3>
+            <p>Analyze sentiment and negative comments to find improvement themes.</p>
+          </article>
+          <article class="function-card">
+            <img src="as/img/callcenter/main/img_function_06@2x.png" alt="Trend changes">
+            <h3>Change Detection</h3>
+            <p>Catch emerging trends through characteristic comments and surging words.</p>
+          </article>
+          <article class="function-card">
+            <img src="as/img/callcenter/main/img_function_07@2x.png" alt="Customer tendency analysis">
+            <h3>Customer Tendency Analysis</h3>
+            <p>Combine voice data with journey information to find deeper insights.</p>
+          </article>
+          <article class="function-card">
+            <img src="as/img/callcenter/main/img_function_08@2x.png" alt="AI idea discovery">
+            <h3>AI Idea Discovery</h3>
+            <p>Generate improvement ideas from real customer voices.</p>
+          </article>
+          <article class="function-card">
+            <img src="as/img/callcenter/main/img_function_09@2x.png" alt="Alert notifications">
+            <h3>Alert Notifications</h3>
+            <p>Notify responsible teams when risky or harmful events are detected.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="picture">
+      <div class="container">
+        <div class="section-head">
+          <h2>Platform overview</h2>
+          <p>From data collection to internal sharing and improvement actions, Mieruka Engine provides an environment for using customer voices from the contact center outward.</p>
+        </div>
+        <div class="picture-panel">
+          <img class="picture-logo" src="as/img/callcenter/logo/logo_mieruka@2x.png" alt="Mieruka Engine">
+          <div class="picture-grid">
+            <article class="picture-item">
+              <img src="as/img/callcenter/illust/img_big_picture_01.svg" alt="Automatic integration">
+              <h3>Automatic Integration</h3>
+              <p>Manage call logs, audio data, and customer voices in one place.</p>
+            </article>
+            <article class="picture-item">
+              <img src="as/img/callcenter/illust/img_big_picture_02.svg" alt="Automatic summarization">
+              <h3>Auto Summaries</h3>
+              <p>Reduce review work by summarizing large volumes of data.</p>
+            </article>
+            <article class="picture-item">
+              <img src="as/img/callcenter/illust/img_big_picture_03.svg" alt="Automatic classification">
+              <h3>Auto Classification</h3>
+              <p>Classify topics by category and quickly confirm trends.</p>
+            </article>
+            <article class="picture-item">
+              <img src="as/img/callcenter/illust/img_big_picture_04.svg" alt="Report generation">
+              <h3>Report Generation</h3>
+              <p>Create reports by team, role, or custom KPI.</p>
+            </article>
+            <article class="picture-item">
+              <img src="as/img/callcenter/illust/img_big_picture_05.svg" alt="Internal feedback">
+              <h3>Internal Feedback</h3>
+              <p>Share insights in time to support improvements and new initiatives.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Implementation flow</h2>
+          <p>We propose a practical rollout plan based on your current data, goals, and operational structure.</p>
+        </div>
+        <ol class="install-steps">
+          <li><span class="step">Step 01</span>Business discussion</li>
+          <li><span class="step">Step 02</span>Agreement</li>
+          <li><span class="step">Step 03</span>Kickoff and operating model</li>
+          <li><span class="step">Step 04</span>Environment setup</li>
+          <li><span class="step">Step 05</span>Start using the platform</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="support">
+      <div class="container">
+        <div class="section-head">
+          <h2>Reliable support</h2>
+          <p>Our team supports both platform operation and practical use of analysis results.</p>
+        </div>
+        <div class="support-grid">
+          <article class="support-card">
+            <img src="as/img/callcenter/main/img_support_01@2x.png" alt="Operation and usage support">
+            <div>
+              <h3>1. Operation and Usage Support</h3>
+              <ul>
+                <li>FAQ site</li>
+                <li>Support desk</li>
+                <li>Zoom support</li>
+                <li>Training sessions</li>
+              </ul>
+            </div>
+          </article>
+          <article class="support-card">
+            <img src="as/img/callcenter/main/img_support_02@2x.png" alt="Consultant support">
+            <div>
+              <h3>2. Analysis Consultant Support</h3>
+              <ul>
+                <li>Usage proposals tailored to your organization</li>
+                <li>Regular meetings for continuous improvement</li>
+                <li>Advice on questions and current initiatives</li>
+              </ul>
+            </div>
+          </article>
+          <article class="support-card">
+            <img src="as/img/callcenter/main/img_support_03@2x.png" alt="Technical support">
+            <div>
+              <h3>3. Technical Support</h3>
+              <ul>
+                <li>Information management in domestic data centers</li>
+                <li>Monthly version updates</li>
+                <li>Regular addition of new features</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="detail" class="section-alt">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Learn more</p>
+          <h2>Explore the points that matter before implementation.</h2>
+        </div>
+        <div class="detail-grid">
+          <a class="detail-card" href="#case">
+            <img src="as/img/callcenter/icon/icon_case.svg" alt="">
+            <strong>Cases</strong>
+          </a>
+          <a class="detail-card" href="#contact">
+            <img src="as/img/callcenter/icon/icon_documents.svg" alt="">
+            <strong>Documents</strong>
+          </a>
+          <a class="detail-card" href="#contact">
+            <img src="as/img/callcenter/icon/icon_seminar.svg" alt="">
+            <strong>Seminars</strong>
+          </a>
+          <a class="detail-card" href="#solution">
+            <img src="as/img/callcenter/icon/icon_service.svg" alt="">
+            <strong>Services</strong>
+          </a>
+          <a class="detail-card" href="#function">
+            <img src="as/img/callcenter/icon/icon_function.svg" alt="">
+            <strong>Features</strong>
+          </a>
+          <a class="detail-card" href="#contact">
+            <img src="as/img/callcenter/icon/icon_price.svg" alt="">
+            <strong>Pricing</strong>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <strong>Mieruka Engine</strong><br>
+        AI-powered customer voice analytics for call centers.
+      </div>
+      <div class="footer-links">
+        <a href="#solution">Solutions</a>
+        <a href="#case">Use Cases</a>
+        <a href="#function">Features</a>
+        <a href="#support">Support</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
